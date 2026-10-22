@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我的网址导航</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #f4f6fb;
+    --card-bg: #ffffff;
+    --primary: #4f6bff;
+    --primary-soft: #eef1ff;
+    --text: #1f2544;
+    --text-sub: #6b7290;
+    --border: #e7ebf5;
+    --shadow: 0 4px 18px rgba(31, 37, 68, 0.06);
+    --shadow-hover: 0 8px 28px rgba(79, 107, 255, 0.18);
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+      "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 40px 20px 60px;
+  }
+
+  .container { max-width: 1080px; margin: 0 auto; }
+
+  /* 头部 */
+  header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  header h1 span { color: var(--primary); }
+  header p {
+    color: var(--text-sub);
+    font-size: 0.95rem;
+    margin-top: 8px;
+  }
+
+  /* 分类区块 */
+  .category { margin-bottom: 40px; }
+  .category-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 18px;
+    padding-left: 4px;
+  }
+  .category-title::before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 20px;
+    background: var(--primary);
+    border-radius: 2px;
+  }
+  .category-title .count {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-sub);
+    background: var(--primary-soft);
+    padding: 2px 10px;
+    border-radius: 10px;
+  }
+
+  /* 卡片网格 */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    box-shadow: var(--shadow);
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--primary);
+  }
+
+  /* 图标方块 */
+  .icon {
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    background: var(--primary);
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  .info { min-width: 0; }
+  .info .name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .info .url {
+    font-size: 0.78rem;
+    color: var(--text-sub);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 2px;
+  }
+
+  /* 分类配色 */
+  .cat-edu .icon { background: linear-gradient(135deg, #4f6bff, #6b8cff); }
+  .cat-edu .category-title::before { background: #4f6bff; }
+  .cat-edu .card:hover { border-color: #4f6bff; }
+
+  .cat-ai .icon { background: linear-gradient(135deg, #10b981, #34d399); }
+  .cat-ai .category-title::before { background: #10b981; }
+  .cat-ai .card:hover { border-color: #10b981; }
+
+  .cat-cloud .icon { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+  .cat-cloud .category-title::before { background: #f59e0b; }
+  .cat-cloud .card:hover { border-color: #f59e0b; }
+
+  .cat-learn .icon { background: linear-gradient(135deg, #8b5cf6, #a78bfa); }
+  .cat-learn .category-title::before { background: #8b5cf6; }
+  .cat-learn .card:hover { border-color: #8b5cf6; }
+
+  .cat-life .icon { background: linear-gradient(135deg, #06b6d4, #22d3ee); }
+  .cat-life .category-title::before { background: #06b6d4; }
+  .cat-life .card:hover { border-color: #06b6d4; }
+
+  /* 页脚 */
+  footer {
+    text-align: center;
+    color: var(--text-sub);
+    font-size: 0.8rem;
+    margin-top: 50px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* 响应式 */
+  @media (max-width: 600px) {
+    body { padding: 24px 14px 40px; }
+    header h1 { font-size: 1.5rem; }
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>我的<span>网址导航</span></h1>
+      <p>个人收藏网址汇总 · 分类整理 · 快速访问</p>
+    </header>
+
+    <!-- 学校教务 -->
+    <section class="category cat-edu">
+      <div class="category-title">
+        学校教务
+        <span class="count">6</span>
+      </div>
+      <div class="grid">
+        <a class="card" href="https://jwbn.sqmc.edu.cn/cas/login.action" target="_blank" rel="noopener">
+          <div class="icon">K</div>
+          <div class="info">
+            <div class="name">教学综合管理服务平台</div>
+            <div class="url">jwbn.sqmc.edu.cn/cas/login.action</div>
+          </div>
+        </a>
+        <a class="card" href="https://sqmc.yuketang.cn/pro/portal/home/?next=https%3A%2F%2Fsqmc.yuketang.cn%2Fpro%2Fcms%2F23368556%2Fcoursecontent" target="_blank" rel="noopener">
+          <div class="icon">豫</div>
+          <div class="info">
+            <div class="name">豫北医学院 · 雨课堂</div>
+            <div class="url">sqmc.yuketang.cn</div>
+          </div>
+        </a>
+        <a class="card" href="https://changjiang.yuketang.cn/web/?next=/v2/web/repository/cloud" target="_blank" rel="noopener">
+          <div class="icon">雨</div>
+          <div class="info">
+            <div class="name">长江雨课堂网页版 · 登录</div>
+            <div class="url">changjiang.yuketang.cn</div>
+          </div>
+        </a>
+        <a class="card" href="https://co.gocheck.cn/teacher/StudentTopicsManage" target="_blank" rel="noopener">
+          <div class="icon">格</div>
+          <div class="info">
+            <div class="name">G·格子达毕业论文（设计）管理系统</div>
+            <div class="url">co.gocheck.cn</div>
+          </div>
+        </a>
+        <a class="card" href="http://noa.sqmc.edu.cn:8082/seeyon/main.do?method=main" target="_blank" rel="noopener">
+          <div class="icon">协</div>
+          <div class="info">
+            <div class="name">豫北医学院协同办公 V9.0SP1</div>
+            <div class="url">noa.sqmc.edu.cn:8082</div>
+          </div>
+        </a>
+        <a class="card" href="http://i.sqmc.edu.cn/onlineServiceClient/#/applicationServiceCenter" target="_blank" rel="noopener">
+          <div class="icon">门</div>
+          <div class="info">
+            <div class="name">学校综合门户入口</div>
+            <div class="url">i.sqmc.edu.cn</div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- AI 编码工具 -->
+    <section class="category cat-ai">
+      <div class="category-title">
+        AI 工具 / 模型
+        <span class="count">11</span>
+      </div>
+      <div class="grid">
+        <a class="card" href="https://openai.com/zh-Hans-CN/codex/" target="_blank" rel="noopener">
+          <div class="icon">Cx</div>
+          <div class="info">
+            <div class="name">Codex | OpenAI 打造的 AI 编码助手</div>
+            <div class="url">openai.com/zh-Hans-CN/codex</div>
+          </div>
+        </a>
+        <a class="card" href="https://claude.com/product/claude-code" target="_blank" rel="noopener">
+          <div class="icon">Cl</div>
+          <div class="info">
+            <div class="name">Claude Code by Anthropic · AI Coding Agent</div>
+            <div class="url">claude.com/product/claude-code</div>
+          </div>
+        </a>
+        <a class="card" href="https://gemini.google/desktop/" target="_blank" rel="noopener">
+          <div class="icon">Ge</div>
+          <div class="info">
+            <div class="name">Gemini for Desktop · Windows & macOS</div>
+            <div class="url">gemini.google/desktop</div>
+          </div>
+        </a>
+        <a class="card" href="https://cloud.siliconflow.cn/me/models" target="_blank" rel="noopener">
+          <div class="icon">Si</div>
+          <div class="info">
+            <div class="name">硅基流动 SiliconFlow · AI 能力提供商</div>
+            <div class="url">cloud.siliconflow.cn</div>
+          </div>
+        </a>
+        <a class="card" href="https://www.deepseek.com/en/harness/" target="_blank" rel="noopener">
+          <div class="icon">Ds</div>
+          <div class="info">
+            <div class="name">DeepSeek Harness · 探索智能边界</div>
+            <div class="url">deepseek.com/en/harness</div>
+          </div>
+        </a>
+        <a class="card" href="https://bailian.console.aliyun.com/cn-beijing/model/settings/api-key" target="_blank" rel="noopener">
+          <div class="icon">百</div>
+          <div class="info">
+            <div class="name">阿里云百炼 · 大模型服务平台控制台</div>
+            <div class="url">bailian.console.aliyun.com</div>
+          </div>
+        </a>
+        <a class="card" href="https://console.volcengine.com/ark/region:cn-beijing/apiKey?apikey=%7B%7D" target="_blank" rel="noopener">
+          <div class="icon">火</div>
+          <div class="info">
+            <div class="name">火山方舟 · API Key 管理</div>
+            <div class="url">console.volcengine.com</div>
+          </div>
+        </a>
+        <a class="card" href="https://github.com/xuanyustudio/LocalMiniDrama" target="_blank" rel="noopener">
+          <div class="icon">剧</div>
+          <div class="info">
+            <div class="name">LocalMiniDrama · 本地 AI 短剧生成工具</div>
+            <div class="url">github.com/xuanyustudio/LocalMiniDrama</div>
+          </div>
+        </a>
+        <a class="card" href="https://dl.dsx2016.com/" target="_blank" rel="noopener">
+          <div class="icon">Dl</div>
+          <div class="info">
+            <div class="name">DlPC 一键懒人包 · 本地 AI 工具整合包</div>
+            <div class="url">dl.dsx2016.com</div>
+          </div>
+        </a>
+        <a class="card" href="https://www.youxiaohou.com/" target="_blank" rel="noopener">
+          <div class="icon">油</div>
+          <div class="info">
+            <div class="name">油小猴 · AI 工具导航</div>
+            <div class="url">youxiaohou.com</div>
+          </div>
+        </a>
+        <a class="card" href="https://aiyy.info/" target="_blank" rel="noopener">
+          <div class="icon">帮</div>
+          <div class="info">
+            <div class="name">AI应用帮 · 帮你用AI</div>
+            <div class="url">aiyy.info</div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- 学习资源 -->
+    <section class="category cat-learn">
+      <div class="category-title">
+        学习资源
+        <span class="count">4</span>
+      </div>
+      <div class="grid">
+        <a class="card" href="https://hello-agents.datawhale.cc/#/./README" target="_blank" rel="noopener">
+          <div class="icon">HA</div>
+          <div class="info">
+            <div class="name">Hello-Agents · Datawhale</div>
+            <div class="url">hello-agents.datawhale.cc</div>
+          </div>
+        </a>
+        <a class="card" href="http://10.3.230.3/courses/22" target="_blank" rel="noopener">
+          <div class="icon">Hd</div>
+          <div class="info">
+            <div class="name">分布式大数据框架 Hadoop</div>
+            <div class="url">10.3.230.3/courses/22</div>
+          </div>
+        </a>
+        <a class="card" href="https://mingkun.wang/" target="_blank" rel="noopener">
+          <div class="icon">学</div>
+          <div class="info">
+            <div class="name">学无止境</div>
+            <div class="url">mingkun.wang</div>
+          </div>
+        </a>
+        <a class="card" href="https://imingxin.wang/" target="_blank" rel="noopener">
+          <div class="icon">铭</div>
+          <div class="info">
+            <div class="name">铭新文库 · 技术电子书与开源文档</div>
+            <div class="url">imingxin.wang</div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- 生活实用 -->
+    <section class="category cat-life">
+      <div class="category-title">
+        生活实用 / 软件
+        <span class="count">4</span>
+      </div>
+      <div class="grid">
+        <a class="card" href="https://iwei.wang/" target="_blank" rel="noopener">
+          <div class="icon">爱</div>
+          <div class="info">
+            <div class="name">爱维网 · 城市便民指南</div>
+            <div class="url">iwei.wang</div>
+          </div>
+        </a>
+        <a class="card" href="https://www.gndown.com/232.html" target="_blank" rel="noopener">
+          <div class="icon">W</div>
+          <div class="info">
+            <div class="name">WinRAR · 老牌压缩软件（烈火汉化版）</div>
+            <div class="url">gndown.com/232.html</div>
+          </div>
+        </a>
+        <a class="card" href="https://www.ddooo.com/" target="_blank" rel="noopener">
+          <div class="icon">多</div>
+          <div class="info">
+            <div class="name">多多软件站 · 绿色软件和单机游戏下载</div>
+            <div class="url">ddooo.com</div>
+          </div>
+        </a>
+        <a class="card" href="https://www.jb51.net/" target="_blank" rel="noopener">
+          <div class="icon">脚</div>
+          <div class="info">
+            <div class="name">脚本之家 · 软件与编程资源</div>
+            <div class="url">jb51.net</div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- 云服务 -->
+    <section class="category cat-cloud">
+      <div class="category-title">
+        云服务 / 开发
+        <span class="count">8</span>
+      </div>
+      <div class="grid">
+        <a class="card" href="https://gpushare.com/auth/login?redirect=https%3A%2F%2Fgpushare.com%2Fcenter%2Fcost%2Fhome" target="_blank" rel="noopener">
+          <div class="icon">恒</div>
+          <div class="info">
+            <div class="name">恒源云 GPUSHARE · 恒源智享云</div>
+            <div class="url">gpushare.com</div>
+          </div>
+        </a>
+        <a class="card" href="ftp://10.3.233.20/" target="_blank" rel="noopener">
+          <div class="icon">Ft</div>
+          <div class="info">
+            <div class="name">我的 FTP 服务器</div>
+            <div class="url">10.3.233.20</div>
+          </div>
+        </a>
+        <a class="card" href="https://dash.cloudflare.com/4daecedbda4155f214aafd11ea871e05/home" target="_blank" rel="noopener">
+          <div class="icon">Cf</div>
+          <div class="info">
+            <div class="name">Cloudflare · Web 性能和安全性</div>
+            <div class="url">dash.cloudflare.com</div>
+          </div>
+        </a>
+        <a class="card" href="https://mp.weixin.qq.com/" target="_blank" rel="noopener">
+          <div class="icon">微</div>
+          <div class="info">
+            <div class="name">微信公众平台</div>
+            <div class="url">mp.weixin.qq.com</div>
+          </div>
+        </a>
+        <a class="card" href="https://nodejs.cn/" target="_blank" rel="noopener">
+          <div class="icon">No</div>
+          <div class="info">
+            <div class="name">Node.js 中文网</div>
+            <div class="url">nodejs.cn</div>
+          </div>
+        </a>
+        <a class="card" href="https://pro.lceda.cn/editor?jspm=lceda.jg.tc.zyb&jlc_vid=TlIMUAUEEgdfVVNQRQUIV11SRVRcUVNfQVgIVwIDT1gxVlNfRllZVV1fRVlZUzsOAxUeFF5JWA0NAgAHWQIASBQHEARBFxYPFAgAADsKFAQKBkoFGQ%3D%3D" target="_blank" rel="noopener">
+          <div class="icon">JL</div>
+          <div class="info">
+            <div class="name">JLCEDA Pro · 嘉立创EDA专业版</div>
+            <div class="url">pro.lceda.cn</div>
+          </div>
+        </a>
+        <a class="card" href="https://gitee.com/" target="_blank" rel="noopener">
+          <div class="icon">Gt</div>
+          <div class="info">
+            <div class="name">Gitee · 码云工作台</div>
+            <div class="url">gitee.com</div>
+          </div>
+        </a>
+        <a class="card" href="https://github.com/" target="_blank" rel="noopener">
+          <div class="icon">Gh</div>
+          <div class="info">
+            <div class="name">GitHub</div>
+            <div class="url">github.com</div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <footer>
+      <p>个人网址导航 · 所有链接在新标签页打开 · 数据准确性由各站点自行维护</p>
+    </footer>
+  </div>
+</body>
+</html>

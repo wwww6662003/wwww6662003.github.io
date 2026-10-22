@@ -6,7 +6,7 @@
 # `jekyll serve`. If you change this file, please restart the server process.
 
 # Site Settings
-title                    : "skyboy"
+title                    : "王维"
 description              : "区块链、机器学习、数据挖掘、模式识别"
 repository               : "wwww6662003/wwww6662003.github.io"
 google_scholar_stats_use_cdn : false
@@ -21,7 +21,7 @@ baidu_site_verification  :  # get baidu_site_verification from https://ziyuan.ba
 
 # Site Author
 author:
-  name             : "skyboy"
+  name             : "王维"
   avatar           : "images/android-chrome-512x512.png"
   bio              : "高校讲师 · 福建师范大学硕士"
   location         : "河南 新乡"

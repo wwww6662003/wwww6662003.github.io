@@ -6,6 +6,6 @@ if %errorlevel% equ 0 (
 ) else (
     git commit -m "my-web-nav"
     git push
-    echo commit and push done
+    echo 😊commit and push done😊
 )
 rem pause
